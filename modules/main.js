@@ -1,3 +1,4 @@
+import { renderCalendarView } from "./calendar.js";
 import StorageManager from "./dataStorage.js";
 import { initializeEventManager } from "./eventManager.js";
 import appSettings from "./settings.js";
@@ -10,3 +11,13 @@ const allEvents = StorageManager.loadAllEvents();
 
 // Initialize listeners for the event manager
 initializeEventManager();
+
+{
+    renderCalendarView(allEvents);
+    const slotDurationSelect = document.getElementById('slotDurationSelect');
+    if (slotDurationSelect) {
+        slotDurationSelect.addEventListener('change', (event) => {
+            renderCalendarView(allEvents);
+        });
+    }
+}

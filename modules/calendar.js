@@ -147,30 +147,34 @@ function createEventsLayer(events) {
     eventsLayer.innerHTML = '';
     eventsLayer.style.height = `${DAY_TOTAL_HEIGHT}px`;
 
+    // We want to assign the lanes before looping through the events so that we can use the assigned lanes in the button creation.
     const assignedLanes = assignLanesForEvents(events);
+
     // Loop through the events and create an event button for each event
     events.forEach((event, index) => {
-        const startTimeMinutes = timeStringToMinutes(event.timeStart);
-        const endTimeMinutes = timeStringToMinutes(event.timeEnd);
-        const duration = endTimeMinutes - startTimeMinutes;
-        const topPosition = startTimeMinutes * PIXELS_PER_MINUTE;
-        const durationHeight = duration * PIXELS_PER_MINUTE;
-        const maxHeight = Math.max(18, durationHeight);
-        const isShort = durationHeight <= 44;
-
-        const laneIndex = assignedLanes.get(event.UID) ?? 0;
-        const totalLanes = calculateTotalConcurrentEvents(event, events);
-        const width = 100 / totalLanes;
-        const leftPosition = width * laneIndex;
-
-        const formattedTimeString = `${formatTime(event.timeStart)} - ${formatTime(event.timeEnd)}`;
-
-        createEventButton(eventsLayer, event, topPosition, maxHeight, isShort, totalLanes, leftPosition, formattedTimeString, index);
+        createEventButton(eventsLayer, events, event, index, assignedLanes);
     });
 }
 
 // Creates an event button for the calendar that displays the basic event information.
-function createEventButton(eventsLayer, event, topPosition, maxHeight, isShort, totalLanes, leftPosition, formattedTimeString, index) {
+function createEventButton(eventsLayer, events, event, index, assignedLanes) {
+    // Button calculations
+    const startTimeMinutes = timeStringToMinutes(event.timeStart);
+    const endTimeMinutes = timeStringToMinutes(event.timeEnd);
+    const duration = endTimeMinutes - startTimeMinutes;
+    const topPosition = startTimeMinutes * PIXELS_PER_MINUTE;
+    const durationHeight = duration * PIXELS_PER_MINUTE;
+    const maxHeight = Math.max(18, durationHeight);
+    const isShort = durationHeight <= 44;
+
+    // Lane calculations
+    const laneIndex = assignedLanes.get(event.UID) ?? 0;
+    const totalLanes = calculateTotalConcurrentEvents(event, events);
+    const width = 100 / totalLanes;
+    const leftPosition = width * laneIndex;
+
+    const formattedTimeString = `${formatTime(event.timeStart)} - ${formatTime(event.timeEnd)}`;
+
     const eventButton = document.createElement('button');
     eventButton.className = isShort ? 'calendarEventContainer calendarEventContainer--compact' : 'calendarEventContainer';
     eventButton.type = 'button';
@@ -203,17 +207,26 @@ function createEventButton(eventsLayer, event, topPosition, maxHeight, isShort, 
 // Assigns a lane to each event based on the duration of the event and the other events that are happening at the same time.
 function assignLanesForEvents(events) {
     const assignedLanes = new Map();
-    // An inline function to calculate the duration of an event
-    const duration = (event) => event.timeEnd - event.timeStart;
-    const sortedEvents = events.sort((a, b) => duration(b) - duration(a) || a.timeStart - b.timeStart);
-    // Loop through the events and assign a lane to each event
+    // Inline functions to calculate the duration and tranlsate time strings to minutes
+    const durationMinutes = (event) => timeStringToMinutes(event.timeEnd) - timeStringToMinutes(event.timeStart);
+    const startMinutes = (event) => timeStringToMinutes(event.timeStart);
+    // Sort the events by duration and start time
+    const sortedEvents = [...events].sort(
+        (event1, event2) => durationMinutes(event2) - durationMinutes(event1) || startMinutes(event1) - startMinutes(event2)
+    );
+
+    // Loop through the sortedevents and assign a lane to each event
     sortedEvents.forEach((event) => {
+        const eventStart = timeStringToMinutes(event.timeStart);
+        const eventEnd = timeStringToMinutes(event.timeEnd);
         const usedLanes = new Set();
-        // Loop through the other events and add the lane of the other event to the used lanes set
+        // Loop through the other events and add the lane of the other event to the used lanes set if it overlaps with the current event
         events.forEach((otherEvent) => {
-            if (otherEvent.UID !== event.UID && (event.timeStart < event.timeEnd && event.timeEnd > event.timeStart) && assignedLanes.has(otherEvent.UID)) {
-                usedLanes.add(assignedLanes.get(otherEvent.UID));
-            }
+            if (otherEvent.UID === event.UID || !assignedLanes.has(otherEvent.UID)) return;
+            const otherStart = timeStringToMinutes(otherEvent.timeStart);
+            const otherEnd = timeStringToMinutes(otherEvent.timeEnd);
+            const overlaps = eventStart < otherEnd && eventEnd > otherStart;
+            if (overlaps) usedLanes.add(assignedLanes.get(otherEvent.UID));
         });
 
         // Find the lowest available lane
@@ -224,15 +237,21 @@ function assignLanesForEvents(events) {
 
         // Set the lane of the event (the key is the event UID and the value is the lane)
         assignedLanes.set(event.UID, lowestAvailableLane);
-    })
+    });
 
     return assignedLanes;
 }
 
-// Calculates the total number of concurrent events that are happening at the same time.
+// Calculates the total number of concurrent events overlapping the given event's time range.
 function calculateTotalConcurrentEvents(event, events) {
-    // Filter the events to only include events that are happening at the same time
-    const concurrentEvents = events.filter((event) => event.timeStart < event.timeEnd && event.timeEnd > event.timeStart);
+    const eventStart = timeStringToMinutes(event.timeStart);
+    const eventEnd = timeStringToMinutes(event.timeEnd);
+    // Filter the events to only include events that overlap with the given event's time range
+    const concurrentEvents = events.filter((other) => {
+        const otherStart = timeStringToMinutes(other.timeStart);
+        const otherEnd = timeStringToMinutes(other.timeEnd);
+        return eventStart < otherEnd && eventEnd > otherStart;
+    });
     // If there are no concurrent events, return 1
     if (concurrentEvents.length === 0) return 1;
 
@@ -240,8 +259,8 @@ function calculateTotalConcurrentEvents(event, events) {
     const points = [];
     // Loop through the concurrent events and add the start and end points to the points array
     concurrentEvents.forEach((concurrentEvent) => {
-        points.push({ time: concurrentEvent.timeStart, delta: 1 });
-        points.push({ time: concurrentEvent.timeEnd, delta: -1 });
+        points.push({ time: timeStringToMinutes(concurrentEvent.timeStart), delta: 1 });
+        points.push({ time: timeStringToMinutes(concurrentEvent.timeEnd), delta: -1 });
     });
 
     // Sort the points by time
@@ -255,8 +274,7 @@ function calculateTotalConcurrentEvents(event, events) {
         count += point.delta;
         maxCount = Math.max(maxCount, count);
     });
-
-    return maxCount;
+    return Math.max(1, maxCount);
 }
 
 // Converts a time string (e.g. "10:00") to the number of minutes since midnight. Use this for event times!
