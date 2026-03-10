@@ -184,7 +184,7 @@ function createEventButton(eventsLayer, events, event, index, assignedLanes) {
   // Attaches event listener to event
   eventButton.addEventListener("click", (clickEvent) => {
       clickEvent.stopPropagation(); // Stops popup from instantly closing
-      showCurrentEvent(event, clickEvent);
+      showClickedEventPopup(event, clickEvent);
   });
   eventsLayer.appendChild(eventButton);
 }
@@ -298,22 +298,22 @@ function getSlotDuration() {
 
 // Creates a popup for the event clicked that shows more info about it.
 // Displays popup at position clicked
-function showCurrentEvent(event, clickEvent) {
-  const currentEvent = document.getElementById("currentEventPopup");
+function showClickedEventPopup(event, clickEvent) {
+  const clickedEventPopup = document.getElementById("clickedEventPopup");
 
-  document.getElementById("currentEventTitle").textContent = event.title;
-  document.getElementById("currentEventTime").textContent = event.timeStart + " - " + event.timeEnd;
-  document.getElementById("currentEventDescription").textContent = event.description;
-  document.getElementById("currentEventAddress").textContent = event.address;
-  currentEvent.style.display = "block";
-  document.addEventListener("click", closeCurrentEvent);
+  document.getElementById("clickedEventPopupTitle").textContent = event.title;
+  document.getElementById("clickedEventPopupTime").textContent = `${formatTime(event.timeStart)} - ${formatTime(event.timeEnd)}`;
+  document.getElementById("clickedEventPopupDescription").textContent = "Description: " + event.description;
+  document.getElementById("clickedEventPopupAddress").textContent = "Address: " + event.address;
+  clickedEventPopup.style.display = "block";
+  document.addEventListener("click", closeClickedEventPopup);
 
-  const popupWidth = currentEvent.offsetWidth;
-  const popupHeight = currentEvent.offsetHeight;
+  const popupWidth = clickedEventPopup.offsetWidth;
+  const popupHeight = clickedEventPopup.offsetHeight;
   const screenWidth = window.innerWidth;
   const screenHeight = window.innerHeight;
-  const x = clickEvent.pageX;
-  const y = clickEvent.pageY;
+  let x = clickEvent.pageX;
+  let y = clickEvent.pageY;
   // Stops popup from going off screen to the right
   if (x + popupWidth > screenWidth) {
       x = clickEvent.pageX - popupWidth;
@@ -322,22 +322,28 @@ function showCurrentEvent(event, clickEvent) {
   if (y + popupHeight > screenHeight) {
       y = clickEvent.pageY - popupHeight;
   }
-  currentEvent.style.left = x + "px";
-  currentEvent.style.top = y + "px";
+  clickedEventPopup.style.left = x + "px";
+  clickedEventPopup.style.top = y + "px";
+  clickedEventPopup.style.borderTop = `5px solid ${event.color}`;
 
-  document.getElementById("editEventButton").addEventListener("click", editCurrentEvent);
+  document.getElementById("editEventButton").addEventListener("click", editClickedEventPopup);
 }
 
 // Closes the event popup by clicking anywhere outside the popup
-function closeCurrentEvent(clickEvent) {
-  const currentEvent = document.getElementById("currentEventPopup");
-  if (!currentEvent.contains(clickEvent.target)) {
-      currentEvent.style.display = "none";
-      document.removeEventListener("click", closeCurrentEvent);
+function isClickOutsideEvent(clickEvent) {
+  const clickedEventPopup = document.getElementById("clickedEventPopup");
+  if (!clickedEventPopup.contains(clickEvent.target)) {
+    closeClickedEventPopup();
   }
 }
 
+function closeClickedEventPopup() {
+    clickedEventPopup.style.display = "none";
+    document.removeEventListener("click", closeClickedEventPopup);
+}
+
 // Will open the editor for the selected event
-function editCurrentEvent() {
+function editClickedEventPopup() {
     console.log("Test. Add stuff later");
+    closeClickedEventPopup();
 }

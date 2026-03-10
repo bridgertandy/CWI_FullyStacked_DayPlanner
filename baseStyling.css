@@ -117,7 +117,7 @@ div {
   width: 6rem;
 }
 
-.currentEvent {
+.clickedEventPopup {
   display: none;
   position: absolute;
   background-color: white;
