@@ -1,6 +1,7 @@
 "use strict";
 
 import * as Calendar from "./calendar.js";
+import {openEventEditor} from "../eventManager.js";
 
 // Render the single day view of the calendar
 export function renderSingleDay(events, viewDate) {
@@ -181,7 +182,11 @@ function createEventButton(eventsLayer, events, event, index, assignedLanes) {
         <span class="calendarEventDescription">${event.description}</span>
         `;
   }
-
+  // Attaches event listener to event
+  eventButton.addEventListener("click", (clickEvent) => {
+      clickEvent.stopPropagation(); // Stops popup from instantly closing
+      showClickedEventPopup(event, clickEvent);
+  });
   eventsLayer.appendChild(eventButton);
 }
 
@@ -289,4 +294,42 @@ function getSlotDuration() {
   const value = document.getElementById("slotDurationSelect")?.value;
   const parsedValue = parseInt(value, 10);
   return Number.isNaN(parsedValue) ? 60 : parsedValue;
+}
+
+
+// Creates a popup for the event clicked that shows more info about it.
+// Displays popup at position clicked
+function showClickedEventPopup(event) {
+  const clickedEventPopup = document.getElementById("clickedEventPopup");
+
+  document.getElementById("clickedEventPopupTitle").textContent = event.title;
+  document.getElementById("clickedEventPopupTime").textContent = `${Calendar.formatTime(event.timeStart)} - ${Calendar.formatTime(event.timeEnd)}`;
+  document.getElementById("clickedEventPopupDescription").textContent = "Description: " + event.description;
+  document.getElementById("clickedEventPopupAddress").textContent = "Address: " + event.address;
+  document.getElementById("editEventButton").onclick = () => {
+    editClickedEventPopup(event);
+  };
+  document.addEventListener("click", isClickOutsideEvent);
+  clickedEventPopup.style.display = "block";
+  clickedEventPopup.style.borderTop = `5px solid ${event.color}`;
+}
+
+// Closes the event popup by clicking anywhere outside the popup
+function isClickOutsideEvent(clickEvent) {
+  const clickedEventPopup = document.getElementById("clickedEventPopup");
+  if (!clickedEventPopup.contains(clickEvent.target)) {
+    closeClickedEventPopup();
+  }
+}
+
+function closeClickedEventPopup() {
+  const clickedEventPopup = document.getElementById("clickedEventPopup");
+  clickedEventPopup.style.display = "none";
+  document.removeEventListener("click", isClickOutsideEvent);
+}
+
+// Will open the editor for the selected event
+function editClickedEventPopup(event) {
+  openEventEditor(event.UID);
+  closeClickedEventPopup();
 }
