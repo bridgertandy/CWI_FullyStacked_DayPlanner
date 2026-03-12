@@ -298,35 +298,17 @@ function getSlotDuration() {
 
 // Creates a popup for the event clicked that shows more info about it.
 // Displays popup at position clicked
-function showClickedEventPopup(event, clickEvent) {
+function showClickedEventPopup(event) {
   const clickedEventPopup = document.getElementById("clickedEventPopup");
 
   document.getElementById("clickedEventPopupTitle").textContent = event.title;
   document.getElementById("clickedEventPopupTime").textContent = `${Calendar.formatTime(event.timeStart)} - ${Calendar.formatTime(event.timeEnd)}`;
   document.getElementById("clickedEventPopupDescription").textContent = "Description: " + event.description;
   document.getElementById("clickedEventPopupAddress").textContent = "Address: " + event.address;
-  clickedEventPopup.style.display = "block";
-  document.addEventListener("click", isClickOutsideEvent);
-
-  const popupWidth = clickedEventPopup.offsetWidth;
-  const popupHeight = clickedEventPopup.offsetHeight;
-  const screenWidth = window.innerWidth;
-  const screenHeight = window.innerHeight;
-  let x = clickEvent.pageX;
-  let y = clickEvent.pageY;
-  // Stops popup from going off screen to the right
-  if (x + popupWidth > screenWidth) {
-      x = clickEvent.pageX - popupWidth;
-  }
-  // Stops popup from going off screen on the bottom
-  if (y + popupHeight > screenHeight) {
-      y = clickEvent.pageY - popupHeight;
-  }
-  clickedEventPopup.style.left = x + "px";
-  clickedEventPopup.style.top = y + "px";
-  clickedEventPopup.style.borderTop = `5px solid ${event.color}`;
-
   document.getElementById("editEventButton").addEventListener("click", editClickedEventPopup);
+  document.addEventListener("click", isClickOutsideEvent);
+  clickedEventPopup.style.display = "block";
+  clickedEventPopup.style.borderTop = `5px solid ${event.color}`;
 }
 
 // Closes the event popup by clicking anywhere outside the popup
@@ -338,12 +320,13 @@ function isClickOutsideEvent(clickEvent) {
 }
 
 function closeClickedEventPopup() {
-    clickedEventPopup.style.display = "none";
-    document.removeEventListener("click", isClickedOutsideEvent);
+  const clickedEventPopup = document.getElementById("clickedEventPopup");
+  clickedEventPopup.style.display = "none";
+  document.removeEventListener("click", isClickOutsideEvent);
 }
 
 // Will open the editor for the selected event
 function editClickedEventPopup() {
-    console.log("Test. Add stuff later");
-    closeClickedEventPopup();
+  console.log("Test. Add stuff later");
+  closeClickedEventPopup();
 }
