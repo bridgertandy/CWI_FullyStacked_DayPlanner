@@ -23,9 +23,8 @@
       </div>
       <!-- Holds the buttons that swap calendar view between Day, Week, Month -->
       <div id="displayButtonsContainer">
-        <button class="displayChangeButton highlightDisplayButton">Day</button>
-        <button class="displayChangeButton">Week</button>
-        <button class="displayChangeButton">Month</button>
+        <!-- If we refactor the today button, we can switch out the 'calendarDisplayButtonsRoot' for the 'displayButtonsContainer' -->
+        <div id="calendarDisplayButtonsRoot"></div> 
         <button class="displayChangeButton" id="goToTodayButton">Today</button>
       </div>
     </header>
@@ -83,24 +82,7 @@
     <!-- 10% of screen height -->
     <!--  -->
     <div id="calendarActionButtonsContainer">
-      <div id="calendarNavButtonsContainer">
-        <button
-          id="prevNavButton"
-          class="calendarNavButton"
-          type="button"
-          aria-label="Previous day, week, or month"
-        >
-          <img src="./assets/icons/chevron-left.svg" />
-        </button>
-        <button
-          id="nextNavButton"
-          class="calendarNavButton"
-          type="button"
-          aria-label="Next day, week, or month"
-        >
-          <img src="./assets/icons/chevron-right.svg" />
-        </button>
-      </div>
+      <div id="calendarNavButtonsContainer"></div>
       <button id="addEventButton">Add Event</button>
     </div>
 
