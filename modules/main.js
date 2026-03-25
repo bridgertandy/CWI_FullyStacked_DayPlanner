@@ -1,3 +1,10 @@
+// import "bootstrap/dist/css/bootstrap.min.css";
+import "../styling/baseStyling.css";
+import "../styling/calendar.css";
+import "../styling/dayCalendar.css";
+import "../styling/eventForm.css";
+import "../styling/weeklyCalendar.css";
+
 import StorageManager from "./dataStorage.js";
 import appSettings from "./settings.js";
 import createSettingsMenu from "./settingsMenu.js";

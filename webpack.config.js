@@ -1,7 +1,12 @@
 const path = require("path");
+const HtmlWebpackPlugin = require("html-webpack-plugin");
+const CopyWebpackPlugin = require("copy-webpack-plugin");
 
 module.exports = {
   entry: "./modules/main.js",
+  resolve: {
+    extensions: [".tsx", ".ts", ".js"],
+  },
   output: {
     filename: "main.js",
     path: path.resolve(__dirname, "dist"),
@@ -14,17 +19,33 @@ module.exports = {
     ],
     watchFiles: ["*.html"],
   },
+  plugins: [
+    new HtmlWebpackPlugin({
+      template: "./index.html",
+    }),
+    new CopyWebpackPlugin({
+      patterns: [{ from: "assets", to: "assets" }],
+    }),
+  ],
   module: {
     rules: [
       {
-        test: /\.js$/,
+        test: /\.(ts|tsx)$/,
+        use: "ts-loader",
         exclude: /node_modules/,
-        use: {
-          loader: "babel-loader",
-          options: {
-            presets: ["@babel/preset-env"],
-          },
-        },
+      },
+      {
+        test: /\.js$/,
+        use: "babel-loader",
+        exclude: /node_modules/,
+      },
+      {
+        test: /\.css$/,
+        use: ["style-loader", "css-loader"],
+      },
+      {
+        test: /\.svg$/,
+        type: "asset/resource",
       },
     ],
   },

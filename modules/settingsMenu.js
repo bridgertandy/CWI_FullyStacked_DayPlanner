@@ -1,5 +1,12 @@
 import appSettings from "./settings.js";
 
+// Icons for menuItems
+import moonIcon from "../assets/icons/moon.svg";
+import thermIcon from "../assets/icons/thermometer.svg";
+import calIcon from "../assets/icons/calendar-1.svg";
+import giftIcon from "../assets/icons/gift.svg";
+import paletteIcon from "../assets/icons/palette.svg";
+
 let menuIsOpen = false;
 
 // Props objects passed to createMenuItem for setting
@@ -7,7 +14,7 @@ let menuIsOpen = false;
 const menuItems = [
   {
     name: "Light Mode",
-    icon: "../assets/icons/moon.svg",
+    icon: moonIcon,
     setting: function () {
       return appSettings.lightMode;
     },
@@ -15,7 +22,7 @@ const menuItems = [
   },
   {
     name: "Temp Unit",
-    icon: "../assets/icons/thermometer.svg",
+    icon: thermIcon,
     setting: function () {
       return appSettings.tempUnit[0] + "°";
     },
@@ -23,7 +30,7 @@ const menuItems = [
   },
   {
     name: "Week Start",
-    icon: "../assets/icons/calendar-1.svg",
+    icon: calIcon,
     setting: function () {
       // Get first 3 letters of day, e.g. "Mon"
       return appSettings.firstDayOfWeek.slice(0, 3);
@@ -32,7 +39,7 @@ const menuItems = [
   },
   {
     name: "Show Holidays",
-    icon: "../assets/icons/gift.svg",
+    icon: giftIcon,
     setting: function () {
       return appSettings.displayHolidays;
     },
@@ -40,7 +47,7 @@ const menuItems = [
   },
   {
     name: "Color Theme",
-    icon: "../assets/icons/palette.svg",
+    icon: paletteIcon,
     setting: function () {
       return appSettings.colorTheme;
     },
