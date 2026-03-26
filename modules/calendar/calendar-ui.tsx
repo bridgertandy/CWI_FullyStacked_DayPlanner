@@ -6,7 +6,7 @@ import { updateHeaderDate } from "./headerDate";
 import CalendarEvent from "../classCalendarEvent";
 
 // State of the calendar UI. Update this interface to add or remove properties needed for the calendar UI. Don't forget to update the calendarState in main.js for now. Until we have a better way.
-interface CalendarUIState {
+type CalendarUIState = {
   calendarView: "day" | "week" | "month" | string;
   viewDate: Date;
   allEvents: CalendarEvent[];
