@@ -1,5 +1,5 @@
-import CalendarEvent from "./classCalendarEvent.js";
-import { CalendarViews } from "./enumCalendarViews.js";
+import CalendarEvent from "./classCalendarEvent";
+import { CalendarViews } from "./enumCalendarViews";
 
 // TODO: replace confirm() dialogs in deletion methods with Bootstrap modal
 

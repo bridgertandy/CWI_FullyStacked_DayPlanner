@@ -5,21 +5,21 @@ import "../styling/dayCalendar.css";
 import "../styling/eventForm.css";
 import "../styling/weeklyCalendar.css";
 
-import StorageManager from "./dataStorage.js";
-import appSettings from "./settings.js";
-import createSettingsMenu from "./settingsMenu.js";
+import StorageManager from "./dataStorage";
+import appSettings from "./settings";
+import createSettingsMenu from "./settingsMenu";
 
-import { updateHeaderDate } from "./calendar/headerDate.js";
-import { renderCalendarView, CalendarView } from "./calendar/calendar.js";
-import { initializeCalendarNavigation } from "./calendar/calendarNavigationButtons.js";
-import { initializeCalendarDisplayButtons } from "./calendar/calendarDisplayButtons.js";
-import initTodayButton from "./todayButton.js";
+import { updateHeaderDate } from "./calendar/headerDate";
+import { renderCalendarView, CalendarView } from "./calendar/calendar";
+import { initializeCalendarNavigation } from "./calendar/calendarNavigationButtons";
+import { initializeCalendarDisplayButtons } from "./calendar/calendarDisplayButtons";
+import initTodayButton from "./todayButton";
 
-import { initializeEventManager } from "./eventManager.js";
+import { initializeEventManager } from "./eventManager";
 
-import { loadWeatherDisplay } from "./weatherDisplay.js";
+import { loadWeatherDisplay } from "./weatherDisplay";
 
-import runTests from "../tests/runTests.js";
+import runTests from "../tests/runTests";
 
 // Load events and user settings from localStorage when the application starts
 const allEvents = StorageManager.loadAllEvents();

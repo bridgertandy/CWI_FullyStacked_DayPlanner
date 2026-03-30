@@ -1,6 +1,6 @@
 "use strict";
 
-import { CalendarView } from "./calendar.js";
+import { CalendarView } from "./calendar";
 
 /**
  * Updates the header date element to reflect the current view date and calendar view.
