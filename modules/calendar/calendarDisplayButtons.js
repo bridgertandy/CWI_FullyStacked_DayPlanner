@@ -1,6 +1,6 @@
 "use strict";
 
-import { CalendarView } from "./calendar.js";
+import { CalendarView } from "./calendar";
 
 /**
  * Initializes Day / Week / Month display buttons to switch calendar view and re-render.

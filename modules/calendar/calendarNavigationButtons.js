@@ -1,6 +1,6 @@
 "use strict";
 
-import { CalendarView } from "./calendar.js";
+import { CalendarView } from "./calendar";
 
 // Adds a single day to the view date
 function addDays(date, delta) {
