@@ -1,9 +1,4 @@
 import React from "react";
-import CalendarEvent from "./classCalendarEvent";
-import StorageManager from "./dataStorage";
-import { openEventEditor } from "./eventManager";
-import { hideEventCreator } from "./eventManager";
-import { submitEvent } from "./eventManager";
 
 type eventFormProps = {
   UID?: string;
@@ -13,12 +8,14 @@ type eventFormProps = {
 };
 
 export default function EventForm({ UID, onCancel, onDelete, onSubmit }: eventFormProps) {
-  if (!UID) {
-    // If UID is null, return an empty event form submission
+  const today: string = new Date().toISOString().slice(0, 10);
+  const title: string = "Add Event";
+  // If UID is null, return an empty event form submission
+  // TODO: Implement event editing functionality
     return (
       <div id="eventPopupContainer" className="">
         <form id="eventForm" onSubmit={onSubmit}>
-          <h2 id="eventFormTitle">Add Event</h2>
+          <h2 id="eventFormTitle">{title}</h2>
           <label htmlFor="eventTitle">
             Event Name <span>*</span>
           </label>
@@ -26,7 +23,7 @@ export default function EventForm({ UID, onCancel, onDelete, onSubmit }: eventFo
           <label htmlFor="eventDate">
             Date <span>*</span>
           </label>
-          <input type="date" id="eventDate" name="date" required />
+          <input type="date" id="eventDate" name="date" value={today} required />
           <div id="timeContainer">
             <label htmlFor="eventStartTime">
               Start Time <span>*</span>
@@ -93,7 +90,4 @@ export default function EventForm({ UID, onCancel, onDelete, onSubmit }: eventFo
         </form>
       </div>
     );
-  } else {
-    // TODO: Implement event editing functionality
-  }
 }

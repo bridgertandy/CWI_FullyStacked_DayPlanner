@@ -3,6 +3,7 @@ import StorageManager from "./dataStorage.js";
 import CalendarEvent from "./classCalendarEvent.js";
 import { renderCalendarView } from "./calendar/calendar.js";
 import React from "react";
+import ReactDOM from "react-dom";
 import { createRoot } from "react-dom/client";
 import EventForm from "./eventForm.tsx";
 
@@ -11,7 +12,6 @@ const eventTitleInput = document.getElementById("eventTitle");
 const endTimeInput = document.getElementById("eventEndTime");
 const eventDateInput = document.getElementById("eventDate");
 const eventFormRootElement = document.getElementById("eventFormRoot");
-const eventFormRoot = createRoot(eventFormRootElement);
 
 //C-3 editing constants
 const eventForm = document.getElementById("eventForm");
@@ -50,11 +50,12 @@ function initializeEventManager() {
   });
 }
 
-/** Handle form submission for creating a new calendar event
+/** 
+ * Handle form submission for creating a new calendar event
  * Extracts data from the form, performs data validation, creates an event object, and assigns it a unique identifier (UID)
  * Uses StorageManager to store the event in localStorage
  * @param {HTMLFormElement} event - The form element containing event details
-*/
+ */
 function submitEvent(event) {
   event.preventDefault();
   // Pull form from the event
@@ -73,7 +74,6 @@ function submitEvent(event) {
   eventProps.UID = id;
   const newEvent = new CalendarEvent(eventProps);
   StorageManager.saveEvent(newEvent);
-  hideEventCreator();
   calenderEventRefresh();
   console.log("Event saved (UID: " + id + ")");
   console.log(newEvent);
@@ -144,42 +144,23 @@ function validateEventSubmission(event) {
  *  Show event creation form
  */
 function showEventCreator() {
-  eventFormRoot.render(<EventForm UID={null} onCancel={hideEventCreator} onSubmit={submitEvent} />);
+  const eventFormRoot = createRoot(eventFormRootElement);
+  eventFormRoot.render(
+    <EventForm UID={null} onCancel={close} onSubmit={submit} onDelete={deleteEvent} />,
+  );
+  
+  function close() {
+    eventFormRoot.unmount();
+  }
 
-  // const cancelEventButton = document.getElementById("cancelEventButton");
-  const eventForm = document.getElementById("eventForm");
-  const deleteEventButton = document.getElementById("deleteEventButton");
+  function submit(component) {
+    submitEvent(component);
+    close();
+  }
 
-  // cancelEventButton.addEventListener("click", () => {
-  //   hideEventCreator();
-  // });
-
-  // eventForm.addEventListener("submit", (e) => {
-  //   submitEvent(e.target);
-  // });
-  //additional listener for 'delete event' button option.  reads click on id="deleteEventButton" and runs the deletion function.
-  // deleteEventButton.addEventListener("click", () => {
-  //   //failure guardrail
-  //   if (!editingEventUID) {
-  //     return;
-  //   }
-  //   StorageManager.deleteEvent(editingEventUID);
-  //   hideEventCreator();
-  //   calenderEventRefresh();
-  // });
-}
-
-/**
- * Hide event creation form and reset form fields
- */
-function hideEventCreator() {
-  eventPopupContainer.classList.remove("visible");
-  eventPopupContainer.classList.add("hidden");
-  eventForm.reset();
-  editingEventUID = null;
-
-  if (eventFormTitle) {
-    eventFormTitle.textContent = "Add Event";
+  function deleteEvent() {
+    StorageManager.deleteEvent(UID);
+    close();
   }
 }
 
@@ -194,10 +175,6 @@ function prepareAddEventMode() {
   }
   //reset function is a cool prebuilt brower function that resets to default.  This clears data for when we switch back to 'Add Event' mode. just thought it was cool.
   // eventForm.reset();
-}
-
-function deleteEventHandler(event) {
-
 }
 
 //Function to open 'edit event' mode and, and display contents of event in correct fields
@@ -245,6 +222,5 @@ function calenderEventRefresh() {
 export {
   initializeEventManager,
   openEventEditor,
-  hideEventCreator,
   submitEvent,
 };
