@@ -37,7 +37,7 @@ function initializeCalendarUI(allEvents: CalendarEvent[]): void {
 // Render the calendar view for the given calendar state. This function should be called when the calendar state changes (e.g. when the user clicks a button to change the view).
 function renderCalendar(calendarState: CalendarUIState): void {
   renderCalendarView(
-    appState.allEventsByUID,
+    calendarState.allEvents,
     calendarState.viewDate,
     appState.calendarView,
   );

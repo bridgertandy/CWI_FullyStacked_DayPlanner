@@ -60,13 +60,7 @@ export function filterEventsForDate(events, viewDate) {
   const year = viewDate.getFullYear();
   const month = String(viewDate.getMonth() + 1).padStart(2, "0");
   const day = String(viewDate.getDate()).padStart(2, "0");
-  const filteredEvents = events.keys().filter((uid) => {
-    const event = events.get(uid);
-    if (event.date === `${year}-${month}-${day}`) {
-      return event;
-    }
-  });
-  return filteredEvents;
+  return events.filter((event) => event.date === `${year}-${month}-${day}`);
 }
 
 // Returns true if the given date is today (same calendar day).
