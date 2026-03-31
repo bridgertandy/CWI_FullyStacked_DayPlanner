@@ -1,3 +1,5 @@
+import "../styling/settingsMenu.css";
+
 import appSettings from "./settings";
 
 // Icons for menuItems
@@ -76,11 +78,15 @@ function createMenuContainer() {
   menuContainer.classList.add("settingsMenuContainer");
   menuContainer.classList.add("hidden"); // not showing initially
 
+  const itemsContainer = document.createElement("div");
+  itemsContainer.classList.add("settingsMenuItemsContainer", "bg-body");
+  menuContainer.append(itemsContainer);
+
   // Iterate through menuItems creating a display element for each one
   // based on the object properties
   menuItems.forEach((item) => {
     const element = createMenuItem(item);
-    menuContainer.append(element);
+    itemsContainer.append(element);
   });
 
   return menuContainer;
