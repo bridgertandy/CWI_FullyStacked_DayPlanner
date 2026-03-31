@@ -1,3 +1,5 @@
+@import url(animations.css);
+
 .settingsMenuButton {
   position: absolute;
   top: 0.25rem;
@@ -56,6 +58,13 @@ body.dark-mode .settingsMenuButton {
   border-left: solid 0.25rem black;
   border-radius: 0.5rem;
   padding: 0.25rem;
+
+  overflow: hidden;
+  animation: expandWidth 0.5s ease-out forwards;
+}
+
+.settingsMenuItemsContainer.closing {
+  animation: closeWidth 0.25s ease-in forwards;
 }
 
 body.dark-mode .settingsMenuItemsContainer {
@@ -77,6 +86,11 @@ body.dark-mode .settingsMenuItemsContainer {
 
   /* Keeps borders from overlapping and doubling in thickness */
   margin-bottom: -1px;
+}
+
+.menuItemContainer:hover {
+  cursor: pointer;
+  background-color: rgba(var(--bs-primary-rgb), 0.5);
 }
 
 .menuItemName {
