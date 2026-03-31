@@ -3,7 +3,6 @@ import appState from "../../appState";
 import { CalendarViews } from "../../enumCalendarViews";
 
 type CalendarNavButtonProps = {
-  calendarState: { viewDate: Date };
   direction?: "subtract" | "add"; // "add" means go to next day/week/month; "subtract" means go to previous day/week/month
   onRender: () => void;
   children: React.ReactNode;
@@ -12,14 +11,12 @@ type CalendarNavButtonProps = {
 /**
  * A component that represents a button to navigate the calendar by one day, week, or month.
  * @param children - The icon to be displayed on the button.
- * @param calendarState - Shared state; viewDate is assigned on navigate (must be the same object calendar-ui uses).
  * @param direction - The direction to navigate the calendar.
  * @param onRender - Function to call when the button is clicked.
  * @returns The JSX element
  */
 function CalendarNavButton({
   children, // This allows the parent component to pass in the icon to be displayed on the button
-  calendarState,
   direction = "add", // Default to going to next day/week/month
   onRender,
 }: CalendarNavButtonProps) {
@@ -28,28 +25,33 @@ function CalendarNavButton({
     e.preventDefault(); // Prevent the default behavior of the button
 
     const delta = direction === "add" ? 1 : -1;
-    const current = calendarState.viewDate;
+    let currentDate = appState.dateViewObject;
 
     // Read view mode at click time so Day/Week/Month toggles apply even if this subtree was not re-rendered.
     switch (appState.calendarView) {
       case CalendarViews.Day:
-        calendarState.viewDate = navigateDay(current, delta);
+        appState.dateView = navigateDay(currentDate, delta);
         break;
       case CalendarViews.Week:
-        calendarState.viewDate = navigateWeek(current, delta);
+        appState.dateView = navigateWeek(currentDate, delta);
         break;
       case CalendarViews.Month:
-        calendarState.viewDate = navigateMonth(current, delta);
+        appState.dateView = navigateMonth(currentDate, delta);
         break;
       default:
-        calendarState.viewDate = navigateDay(current, delta);
+        appState.dateView = navigateDay(currentDate, delta);
     }
 
     onRender();
   };
 
   return (
-    <button type="button" id="calendarNavButton" className="btn btn-sm btn-primary d-flex justify-content-center align-items-center" onClick={handleClick}>
+    <button
+      type="button"
+      id="calendarNavButton"
+      className="btn btn-sm btn-primary d-flex justify-content-center align-items-center"
+      onClick={handleClick}
+    >
       {children}
     </button>
   );
@@ -59,7 +61,7 @@ function CalendarNavButton({
 function navigateDay(date: Date, delta: number) {
   const newDate = new Date(date.getTime());
   newDate.setDate(newDate.getDate() + delta);
-  return newDate;
+  return newDate.toLocaleDateString("en-CA");
 }
 
 // Adds a single week to the view date
@@ -67,11 +69,25 @@ function navigateWeek(date: Date, delta: number) {
   return navigateDay(date, delta * 7);
 }
 
-// Adds a single month to the view date
+// Adds a single month to the view date. Clamps the day (e.g. Mar 31 + 1 → Apr 30) so
+// setMonth does not overflow into the next month.
 function navigateMonth(date: Date, delta: number) {
+  const day = date.getDate();
   const newDate = new Date(date.getTime());
+  // Set the day to the first day of the month
+  newDate.setDate(1);
+  // Add the delta months
   newDate.setMonth(newDate.getMonth() + delta);
-  return newDate;
+  // Get the last day of the month
+  const lastDay = new Date(
+    newDate.getFullYear(),
+    newDate.getMonth() + 1,
+    0,
+  ).getDate();
+
+  // Set the day to the minimum of the current day and the last day of the month
+  newDate.setDate(Math.min(day, lastDay));
+  return newDate.toLocaleDateString("en-CA");
 }
 
 export default CalendarNavButton;

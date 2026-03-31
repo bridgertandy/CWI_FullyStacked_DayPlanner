@@ -27,7 +27,7 @@ createSettingsMenu();
 initializeEventManager();
 
 // Initialize and render all of the calendar UI components (e.g. display (view) buttons, navigation buttons, and the full calendar)
-initializeCalendarUI(allEvents);
+initializeCalendarUI();
 
 initTodayButton();
 loadWeatherDisplay();

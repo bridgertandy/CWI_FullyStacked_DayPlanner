@@ -2,7 +2,7 @@ import CalendarDisplayButton from "../navigation/calendar-display-button";
 import { CalendarViews } from "../../enumCalendarViews";
 
 type CalendarDisplayButtonsGroupProps = {
-  activeView: "day" | "week" | "month" | string;
+  activeView: CalendarViews;
   // A function to call when a button is clicked. The parent gets to decide what to do within this function.
   onSelectView: (view: CalendarViews) => void;
 };
@@ -21,19 +21,19 @@ function CalendarDisplayButtonsGroup({
     <>
       {/* Day view button */}
       <CalendarDisplayButton
-        calendarView={CalendarViews.Day}
+        assignedCalendarView={CalendarViews.Day}
         isActive={activeView === CalendarViews.Day}
         onClick={() => onSelectView(CalendarViews.Day)}
       />
       {/* Week view button */}
       <CalendarDisplayButton
-        calendarView={CalendarViews.Week}
+        assignedCalendarView={CalendarViews.Week}
         isActive={activeView === CalendarViews.Week}
         onClick={() => onSelectView(CalendarViews.Week)}
       />
       {/* Month view button */}
       <CalendarDisplayButton
-        calendarView={CalendarViews.Month}
+        assignedCalendarView={CalendarViews.Month}
         isActive={activeView === CalendarViews.Month}
         onClick={() => onSelectView(CalendarViews.Month)}
       />
