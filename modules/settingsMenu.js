@@ -1,7 +1,7 @@
 import "../styling/settingsMenu.css";
 
 import appSettings from "./settings";
-import { loadWeatherDisplay, refreshWeatherFromCache } from "./weatherDisplay";
+import { loadWeatherDisplay } from "./weatherDisplay";
 
 // Icons for menuItems
 import moonIcon from "../assets/icons/moon.svg";
