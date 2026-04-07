@@ -81,7 +81,7 @@ const appSettings = {
     }
     
     // Reload weather display after changing temperature unit
-    loadWeatherDisplay("Boise");
+    loadWeatherDisplay();
   },
   //
   // Color theme
