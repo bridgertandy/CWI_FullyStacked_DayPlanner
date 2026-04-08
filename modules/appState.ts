@@ -112,10 +112,21 @@ class AppState {
     if (!this._eventsByDate.has(dateKey)) {
       this._eventsByDate.set(dateKey, []);
     }
+
     // @ts-ignore - TypeScript thinks this._eventsByDate.get(dateKey) could be undefined,
     // but we just ensured it exists, so go home TypeScript, you're drunk
-    this._eventsByDate.get(dateKey).push(event);
-
+    if (this._eventsByDate.get(dateKey).some((e) => e.UID === event.UID)) {
+      // @ts-ignore
+      // If an event with the same UID already exists for this date, replace it in the array
+      const updatedEvents = this._eventsByDate
+        .get(dateKey)
+        .map((e) => (e.UID === event.UID ? event : e));
+      this._eventsByDate.set(dateKey, updatedEvents);
+    } else {
+      // @ts-ignore
+      // Otherwise add the new event to the array for this date
+      this._eventsByDate.get(dateKey).push(event);
+    }
     StorageManager.saveEvent(event);
   }
 
