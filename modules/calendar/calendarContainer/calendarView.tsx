@@ -1,5 +1,6 @@
 import CalendarEvent from "../../classCalendarEvent";
 import { CalendarViews } from "../../enumCalendarViews";
+import DayView from "./dayView";
 
 type Props = {
 	view: CalendarViews;
@@ -17,7 +18,11 @@ export default function CalendarView({
 }: Props) {
 	if (view === CalendarViews.Day) {
 		return (
-			<div id="calendarDayContentWrapper" className="calendarDayContent" />
+			<DayView 
+				events={events}
+				viewDate={viewDate}
+				slotDuration={slotDuration}
+			/>
 		);
 	}
 

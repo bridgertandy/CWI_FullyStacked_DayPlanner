@@ -1,4 +1,3 @@
-import { useState, useEffect } from "react";
 import CalendarView from "./calendarView"
 import appState, { useAppState } from "../../appState";
 
@@ -28,7 +27,8 @@ export default function calendarWrapper() {
 			view={snapshot.calendarView}
 			events={eventsForViewDate}
 			viewDate={appState.dateViewObject} 
-			slotDuration={0}		/>
+			slotDuration={0}		
+		/>
 	);
 
 }

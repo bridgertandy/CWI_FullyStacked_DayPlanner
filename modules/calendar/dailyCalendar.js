@@ -278,7 +278,7 @@ function calculateTotalConcurrentEvents(event, events) {
 }
 
 // Creates the full 24 hour slots
-function createAllSlotsForDay(slotDuration) {
+export default function createAllSlotsForDay(slotDuration) {
   const slots = [];
   for (let i = 0; i < Calendar.MINUTES_PER_DAY; i += slotDuration) {
     slots.push(i);
