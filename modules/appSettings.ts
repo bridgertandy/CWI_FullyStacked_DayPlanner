@@ -136,6 +136,8 @@ class AppSettings {
   }
 
   restoreDefaults() {
+    document.documentElement.setAttribute("data-bs-theme", "light");
+    document.body.classList.remove("dark-mode");
     this._lightMode = "light";
     this._tempUnit = "Fahrenheit";
     this._firstDayOfWeek = "Sunday";

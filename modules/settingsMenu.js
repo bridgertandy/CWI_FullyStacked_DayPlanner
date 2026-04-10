@@ -145,7 +145,6 @@ function closeMenu() {
       menuButton.classList.toggle("settingsMenuClose");
       menuContainer.classList.toggle("hidden");
       menuIsOpen = false;
-      appSettings.saveSettings();
       document.removeEventListener("click", outsideClickListener);
     },
     { once: true },

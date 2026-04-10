@@ -1,5 +1,5 @@
 import { CalendarViews } from "../enumCalendarViews";
-import { useAppState } from "../appState";
+import appState, { useAppState } from "../appState";
 import { useAppSettings } from "../appSettings";
 
 /**
@@ -7,22 +7,21 @@ import { useAppSettings } from "../appSettings";
  * @returns The JSX element
  */
 function CalendarHeaderDisplay() {
-  const { calendarView, dateView } = useAppState();
+  const { calendarView } = useAppState();
   const { firstDayOfWeek } = useAppSettings();
   return (
-    <span>{formatHeaderDate(calendarView, dateView, firstDayOfWeek)}</span>
+    <span>
+      {formatHeaderDate(calendarView, firstDayOfWeek, appState.dateViewObject)}
+    </span>
   );
 }
 
 // Formats the header date based on the viewing date and calendar view
 function formatHeaderDate(
   calendarView: CalendarViews,
-  dateView: string,
   firstDayOfWeek: string,
+  date: Date,
 ): string {
-  const date = new Date(dateView);
-  date.setHours(0, 0, 0, 0);
-
   switch (calendarView) {
     case "day":
       return formatSingleDay(date);
@@ -79,4 +78,10 @@ function formatMonth(date: Date) {
   });
 }
 
-export { CalendarHeaderDisplay };
+export {
+  CalendarHeaderDisplay,
+  formatHeaderDate,
+  formatSingleDay,
+  formatWeekRange,
+  formatMonth,
+};

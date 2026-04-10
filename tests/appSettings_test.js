@@ -1,6 +1,6 @@
 import appSettings from "../modules/appSettings";
 
-export function appSettingsTests() {
+export default function appSettingsTests() {
   let passed = 0;
   let total = 0;
 
@@ -180,7 +180,13 @@ export function appSettingsTests() {
 
     appSettings.restoreDefaults();
 
+    const docBody = document.body;
     assertEqual(appSettings.lightMode, "light", "lightMode");
+    assertEqual(
+      docBody.classList.contains("dark-mode"),
+      false,
+      "body should not have dark-mode class",
+    );
     assertEqual(appSettings.tempUnit, "Fahrenheit", "tempUnit");
     assertEqual(appSettings.firstDayOfWeek, "Sunday", "firstDayOfWeek");
     assertEqual(appSettings.displayHolidays, true, "displayHolidays");
