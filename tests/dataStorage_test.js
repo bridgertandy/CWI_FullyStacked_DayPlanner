@@ -45,7 +45,6 @@ function storageTests() {
   };
 
   // ─── SAVE EVENT ───────────────────────────────────────────────────────────────
-  console.log("🧪 Testing StorageManager...");
 
   expect("Saves event to localStorage with correct key", () => {
     clearStorage();

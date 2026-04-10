@@ -36,8 +36,6 @@ export default function appStateTests() {
       );
   }
 
-  console.log("🧪 Testing AppState...");
-
   // Mock confirm() so removeEvent calls don't block on a dialog
   const originalConfirm = globalThis.confirm;
   globalThis.confirm = () => true;
