@@ -5,21 +5,23 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Day Planner</title>
   </head>
-  <body>
+  <body class="gap-1">
     <!--  -->
     <!-- Top of the app with title, today's date, and weather container -->
     <!-- 15% of screen height -->
     <!--  -->
-    <header id="appHeader" class="basicContainer">
-      <h3 id="appTitle">Day Planner</h3>
-      <div id="headerInfoContainer">
-        <div id="headerDateContainer"></div>
+    <header
+      class="d-flex d-flex px-1 align-items-center justify-content-between py-1 w-100 border-bottom"
+    >
+      <div id="headerDateContainer" class="px-2"></div>
 
-        <div id="headerWeatherContainer">
-          <div id="weatherDisplay">
-            <p>Weather loading...</p>
-          </div>
-        </div>
+      <div id="headerWeatherContainer" class="px-2">
+        <button
+          id="weatherDisplay"
+          class="btn btn-sm btn-outline-secondary d-inline-flex align-items-center"
+        >
+          <p>Weather loading...</p>
+        </button>
       </div>
     </header>
 
@@ -59,6 +61,15 @@
           class="calendarMonthContent"
         ></div>
       </div>
+    </div>
+
+    <!--Event Popup-->
+    <div id="clickedEventPopup" class="clickedEventPopup">
+      <h2 id="clickedEventPopupTitle"></h2>
+      <p id="clickedEventPopupTime"></p>
+      <p id="clickedEventPopupAddress"></p>
+      <p id="clickedEventPopupDescription"></p>
+      <button type="button" id="editEventButton">Edit</button>
     </div>
 
     <!--Event Popup-->

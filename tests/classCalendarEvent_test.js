@@ -43,8 +43,6 @@ function eventTests() {
     }
   }
 
-  console.log("🧪 Testing CalendarEvent...");
-
   // ─── MISSING REQUIRED FIELDS ─────────────────────────────────────────────────
   expectFailure("Missing date", {
     timeStart: "09:00",
