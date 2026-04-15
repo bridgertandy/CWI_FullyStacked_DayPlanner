@@ -34,47 +34,15 @@ export default function EventForm({
     >
       <form id="eventForm" className="bg-body" onSubmit={onSubmit}>
         <h2 id="eventFormTitle">{title}</h2>
-        <label htmlFor="eventTitle">
-          Event Name <span className="text-danger">*</span>
-        </label>
-        <input
-          type="text"
-          id="eventTitle"
-          name="title"
-          defaultValue={targetEvent?.title}
-          required
-        />
         <div>
-          <label htmlFor="eventDate">
-            Date <span className="text-danger">*</span>
+          <label htmlFor="eventTitle">
+            Event Name <span className="text-danger">*</span>
           </label>
           <input
-            type="date"
-            id="eventDate"
-            name="date"
-            defaultValue={targetEvent?.date ?? appState.dateView}
-            required
-          />
-          <label htmlFor="eventStartTime">
-            Start <span className="text-danger">*</span>
-          </label>
-          <input
-            type="time"
-            id="eventStartTime"
-            name="timeStart"
-            defaultValue={targetEvent?.timeStart}
-            step={900}
-            required
-          />
-          <label htmlFor="eventEndTime">
-            End <span className="text-danger">*</span>
-          </label>
-          <input
-            type="time"
-            id="eventEndTime"
-            name="timeEnd"
-            defaultValue={targetEvent?.timeEnd}
-            step={900}
+            type="text"
+            id="eventTitle"
+            name="title"
+            defaultValue={targetEvent?.title}
             required
           />
           <input
@@ -93,7 +61,47 @@ export default function EventForm({
             <option value="#ff00ff">Magenta</option>
             <option value="#00ffff">Cyan</option>
           </datalist>
+        </div>
+        <div>
+          <div className="inputPair">
+            <label htmlFor="eventDate">
+              Date <span className="text-danger">*</span>
+            </label>
+            <input
+              type="date"
+              id="eventDate"
+              name="date"
+              defaultValue={targetEvent?.date ?? appState.dateView}
+              required
+            />
           </div>
+          <div className="inputPair">
+            <label htmlFor="eventStartTime">
+              Start <span className="text-danger">*</span>
+            </label>
+            <input
+              type="time"
+              id="eventStartTime"
+              name="timeStart"
+              defaultValue={targetEvent?.timeStart}
+              step={900}
+              required
+            />
+          </div>
+          <div className="inputPair">
+            <label htmlFor="eventEndTime">
+              End <span className="text-danger">*</span>
+            </label>
+            <input
+              type="time"
+              id="eventEndTime"
+              name="timeEnd"
+              defaultValue={targetEvent?.timeEnd}
+              step={900}
+              required
+            />
+          </div>
+        </div>
         <label htmlFor="eventAddress">Address</label>
         <input
           type="text"
@@ -107,7 +115,7 @@ export default function EventForm({
           id="eventDescription"
           name="description"
           defaultValue={targetEvent?.description}
-          rows={4}
+          rows={3}
           cols={50}
         />
         <div id="eventFormButtonsContainer">
